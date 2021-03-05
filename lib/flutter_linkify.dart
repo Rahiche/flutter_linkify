@@ -309,8 +309,12 @@ TextSpan buildTextSpan(
   TextStyle style,
   TextStyle linkStyle,
   LinkCallback onOpen,
+  String prefixText,
+  TextStyle prefixTextStyle,
 }) {
   return TextSpan(
+    text: prefixText,
+    style: prefixTextStyle,
     children: elements.map<WidgetSpan>(
       (element) {
         if (element is LinkableElement) {
