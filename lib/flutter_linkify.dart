@@ -76,6 +76,7 @@ class Linkify extends StatelessWidget {
   /// Style for [prefixText]
   final TextStyle prefixTextStyle;
 
+
   const Linkify({
     Key key,
     @required this.text,
@@ -308,12 +309,8 @@ TextSpan buildTextSpan(
   TextStyle style,
   TextStyle linkStyle,
   LinkCallback onOpen,
-  String prefixText,
-  TextStyle prefixTextStyle,
 }) {
   return TextSpan(
-    text: prefixText,
-    style: prefixTextStyle,
     children: elements.map<WidgetSpan>(
       (element) {
         if (element is LinkableElement) {
@@ -322,7 +319,9 @@ TextSpan buildTextSpan(
             inlineSpan: TextSpan(
               text: element.text,
               style: linkStyle,
-              recognizer: onOpen != null ? (TapGestureRecognizer()..onTap = () => onOpen(element)) : null,
+              recognizer: onOpen != null
+                  ? (TapGestureRecognizer()..onTap = () => onOpen(element))
+                  : null,
             ),
           );
         } else {
