@@ -76,7 +76,6 @@ class Linkify extends StatelessWidget {
   /// Style for [prefixText]
   final TextStyle prefixTextStyle;
 
-
   const Linkify({
     Key key,
     @required this.text,
@@ -115,6 +114,9 @@ class Linkify extends StatelessWidget {
         onOpen: onOpen,
         prefixText: prefixText,
         prefixTextStyle: prefixTextStyle,
+        maxLines: maxLines,
+        overflow: overflow,
+        strutStyle: strutStyle,
         linkStyle: Theme.of(context)
             .textTheme
             .bodyText2
@@ -258,6 +260,8 @@ class SelectableLinkify extends StatelessWidget {
         elements,
         style: Theme.of(context).textTheme.bodyText2.merge(style),
         onOpen: onOpen,
+        strutStyle: strutStyle,
+        maxLines: maxLines,
         linkStyle: Theme.of(context)
             .textTheme
             .bodyText2
@@ -293,11 +297,17 @@ class LinkableSpan extends WidgetSpan {
   LinkableSpan({
     @required MouseCursor mouseCursor,
     @required InlineSpan inlineSpan,
+    StrutStyle strutStyle,
+    int maxLines,
+    TextOverflow overflow,
   }) : super(
           child: MouseRegion(
             cursor: mouseCursor,
             child: Text.rich(
               inlineSpan,
+              strutStyle: strutStyle,
+              maxLines: maxLines,
+              overflow: overflow,
             ),
           ),
         );
@@ -311,6 +321,9 @@ TextSpan buildTextSpan(
   LinkCallback onOpen,
   String prefixText,
   TextStyle prefixTextStyle,
+  StrutStyle strutStyle,
+  int maxLines,
+  TextOverflow overflow,
 }) {
   return TextSpan(
     text: prefixText,
@@ -327,13 +340,21 @@ TextSpan buildTextSpan(
                   ? (TapGestureRecognizer()..onTap = () => onOpen(element))
                   : null,
             ),
+            strutStyle: strutStyle,
+            maxLines: maxLines,
+            overflow: overflow,
           );
         } else {
           return WidgetSpan(
-            child: Text.rich(TextSpan(
-              text: element.text,
-              style: style,
-            )),
+            child: Text.rich(
+              TextSpan(
+                text: element.text,
+                style: style,
+              ),
+              strutStyle: strutStyle,
+              maxLines: maxLines,
+              overflow: overflow,
+            ),
           );
         }
       },
