@@ -328,7 +328,7 @@ TextSpan buildTextSpan(
   return TextSpan(
     text: prefixText,
     style: prefixTextStyle,
-    children: elements.map<WidgetSpan>(
+    children: elements.map<InlineSpan>(
       (element) {
         if (element is LinkableElement) {
           return LinkableSpan(
@@ -336,25 +336,16 @@ TextSpan buildTextSpan(
             inlineSpan: TextSpan(
               text: element.text,
               style: linkStyle,
-              recognizer: onOpen != null
-                  ? (TapGestureRecognizer()..onTap = () => onOpen(element))
-                  : null,
+              recognizer: onOpen != null ? (TapGestureRecognizer()..onTap = () => onOpen(element)) : null,
             ),
             strutStyle: strutStyle,
             maxLines: maxLines,
             overflow: overflow,
           );
         } else {
-          return WidgetSpan(
-            child: Text.rich(
-              TextSpan(
-                text: element.text,
-                style: style,
-              ),
-              strutStyle: strutStyle,
-              maxLines: maxLines,
-              overflow: overflow,
-            ),
+          return TextSpan(
+            text: element.text,
+            style: style,
           );
         }
       },
