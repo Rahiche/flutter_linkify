@@ -73,6 +73,12 @@ class Linkify extends StatelessWidget {
   /// Defines how the paragraph will apply TextStyle.height to the ascent of the first line and descent of the last line.
   final TextHeightBehavior? textHeightBehavior;
 
+  /// Text to be displayed before the main [text]
+  final String? prefixText;
+
+  /// Style for [prefixText]
+  final TextStyle? prefixTextStyle;
+
   const Linkify({
     Key? key,
     required this.text,
@@ -93,6 +99,8 @@ class Linkify extends StatelessWidget {
     this.locale,
     this.textWidthBasis = TextWidthBasis.parent,
     this.textHeightBehavior,
+    this.prefixText,
+    this.prefixTextStyle,
   }) : super(key: key);
 
   @override
@@ -109,6 +117,8 @@ class Linkify extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyText2?.merge(style),
         onOpen: onOpen,
         useMouseRegion: true,
+        prefixText: prefixText,
+        prefixTextStyle: prefixTextStyle,
         linkStyle: Theme.of(context)
             .textTheme
             .bodyText2
@@ -330,8 +340,12 @@ TextSpan buildTextSpan(
   TextStyle? linkStyle,
   LinkCallback? onOpen,
   bool useMouseRegion = false,
+  String? prefixText,
+  TextStyle? prefixTextStyle,
 }) {
   return TextSpan(
+    text: prefixText,
+    style: prefixTextStyle,
     children: elements.map<InlineSpan>(
       (element) {
         if (element is LinkableElement) {
@@ -341,14 +355,18 @@ TextSpan buildTextSpan(
               inlineSpan: TextSpan(
                 text: element.text,
                 style: linkStyle,
-                recognizer: onOpen != null ? (TapGestureRecognizer()..onTap = () => onOpen(element)) : null,
+                recognizer: onOpen != null
+                    ? (TapGestureRecognizer()..onTap = () => onOpen(element))
+                    : null,
               ),
             );
           } else {
             return TextSpan(
               text: element.text,
               style: linkStyle,
-              recognizer: onOpen != null ? (TapGestureRecognizer()..onTap = () => onOpen(element)) : null,
+              recognizer: onOpen != null
+                  ? (TapGestureRecognizer()..onTap = () => onOpen(element))
+                  : null,
             );
           }
         } else {
